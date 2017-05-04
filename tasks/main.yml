@@ -1,0 +1,7 @@
+---
+- include: install.yml
+  tags: php-telegram-bot:install
+- include: database.yml
+  tags: php-telegram-bot:database
+- include: webhook.yml
+  tags: php-telegram-bot:webhook

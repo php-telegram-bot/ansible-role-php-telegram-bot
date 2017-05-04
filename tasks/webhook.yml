@@ -1,0 +1,10 @@
+---
+- name: Set webhooks for all bots.
+  uri:
+    url: "{{ item.item.webhook.url }}?s={{ item.item.secret }}&a=reset"
+    return_content: yes
+  with_items: "{{ php_telegram_bot_bots_installed.results }}"
+  when: item.item.webhook is defined
+  register: php_telegram_bot_set_webhook
+  changed_when: php_telegram_bot_set_webhook.content == "Webhook is already deleted\nWebhook was set\n"
+  ignore_errors: yes

@@ -1,0 +1,43 @@
+---
+php_telegram_bot_composer_package: noplanman/telegram-bot-manager
+php_telegram_bot_composer_version: ''
+php_telegram_bot_mysql_structure: vendor/longman/telegram-bot/structure.sql
+
+php_telegram_bot_websrv_user: www-data
+php_telegram_bot_websrv_group: www-data
+
+php_telegram_bot_bots: []
+# php_telegram_bot_bots:
+#   # Simple bot (minimal)
+#   - api_key: 12345:api_key
+#     working_dir: /var/www/simplebot_minimal
+#
+#   # Simple bot (with db)
+#   - api_key: 12345:api_key
+#     bot_username: my_bot
+#     working_dir: /var/www/simplebot_with_db
+#     mysql:
+#       host: localhost
+#       user: root
+#       password: root
+#       database: db
+#
+#   # Simple bot (with webhook)
+#   - api_key: 12345:api_key
+#     bot_username: my_bot
+#     working_dir: /var/www/simplebot_with_webhook
+#     secret: super-secret
+#     webhook:
+#       url: my.webhook.url
+#
+#   # Project bot
+#   - api_key: 12345:api_key
+#     bot_username: my_bot
+#     project_repo: https://projectrepo.git
+#     working_dir: /var/www/projectbot
+#     mysql:
+#       host: db.server
+#       user: root
+#       password: root
+#       database: db
+#       structure: my-custom-db-structure.sql

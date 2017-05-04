@@ -1,0 +1,8 @@
+---
+- hosts: all
+  remote_user: vagrant
+  become: yes
+  roles: [../../]
+  pre_tasks:
+    - fail:
+        msg: "No tests yet!"

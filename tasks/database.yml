@@ -1,0 +1,36 @@
+---
+
+- block:
+    - name: Create temporary file for database structure creation script.
+      tempfile:
+      register: php_telegram_bot_tmp_mysql_structure_file
+      changed_when: no
+
+    - name: Ensure database structure creation script is created.
+      copy:
+        src: create_db_structure.php
+        dest: "{{ php_telegram_bot_tmp_mysql_structure_file.path }}"
+      changed_when: no
+
+    - name: Ensure database structure is present on first install.
+      shell: >
+        php '{{ php_telegram_bot_tmp_mysql_structure_file.path }}'
+        host='{{ item.item.mysql.host }}'
+        user='{{ item.item.mysql.user }}'
+        password='{{ item.item.mysql.password }}'
+        database='{{ item.item.mysql.database }}'
+        encoding='{{ item.item.mysql.encoding | default('utf8mb4') }}'
+        file='{{ item.item.mysql.structure | default(item.item.working_dir + '/' + php_telegram_bot_mysql_structure) }}'
+      with_items: "{{ php_telegram_bot_bots_installed.results }}"
+      when: item.changed and item.item.mysql is defined
+      register: php_telegram_bot_mysql_structure_set_up
+      changed_when: php_telegram_bot_mysql_structure_set_up.stdout != 'No changes'
+
+    - name: Remove temporary database structure creation script.
+      file:
+        path: "{{ php_telegram_bot_tmp_mysql_structure_file.path }}"
+        state: absent
+      changed_when: no
+
+  when: php_telegram_bot_bots_installed.changed
+  no_log: yes

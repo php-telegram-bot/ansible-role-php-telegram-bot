@@ -1,0 +1,8 @@
+---
+- hosts: localhost
+  become: yes
+  become_user: root
+  roles: [../../]
+  pre_tasks:
+    - fail:
+        msg: "No tests yet!"

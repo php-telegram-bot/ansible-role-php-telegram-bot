@@ -1,0 +1,58 @@
+---
+- name: Fetch all project bot repositories.
+  become: yes
+  become_user: "{{ php_telegram_bot_websrv_user }}"
+  git:
+    repo: "{{ item.project_repo }}"
+    dest: "{{ item.working_dir }}"
+    version: "{{ item.project_repo_branch | default('master') }}"
+    accept_hostkey: yes
+  with_items: "{{ php_telegram_bot_bots }}"
+  when: item.project_repo is defined
+  ignore_errors: yes
+
+- name: Ensure public folder for simple bots exists.
+  file:
+    path: "{{ item.working_dir }}/public"
+    state: directory
+    owner: "{{ php_telegram_bot_websrv_user }}"
+    group: "{{ php_telegram_bot_websrv_user }}"
+  with_items: "{{ php_telegram_bot_bots }}"
+  when: item.project_repo is not defined and item.manager_path is not defined
+
+- name: Create all simple bot projects.
+  become: yes
+  become_user: "{{ php_telegram_bot_websrv_user }}"
+  composer:
+    working_dir: "{{ item.working_dir }}"
+    command: require
+    arguments: "{{ php_telegram_bot_composer_package }}" "{{ php_telegram_bot_composer_version }}"
+  with_items: "{{ php_telegram_bot_bots }}"
+  when: item.project_repo is not defined
+
+- name: Install all bots with Composer.
+  become: yes
+  become_user: "{{ php_telegram_bot_websrv_user }}"
+  composer:
+    working_dir: "{{ item.working_dir }}"
+    command: install
+  with_items: "{{ php_telegram_bot_bots }}"
+  register: php_telegram_bot_bots_installed
+
+- name: Copy manager.php for all bots.
+  copy:
+    src: "{{ item.manager_src | default('manager.default.php') }}"
+    dest: "{{ item.manager_path | default(item.working_dir + '/public/manager.php') }}"
+    owner: "{{ php_telegram_bot_websrv_user }}"
+    group: "{{ php_telegram_bot_websrv_user }}"
+  with_items: "{{ php_telegram_bot_bots }}"
+  when: item.project_repo is not defined or item.manager_src is defined or item.manager_path is defined
+
+- name: Copy .env for all bots.
+  template:
+    src: "{{ item.dotenv_src | default('.env.default.j2') }}"
+    dest: "{{ item.dotenv_path | default(item.working_dir + '/.env') }}"
+    owner: "{{ php_telegram_bot_websrv_user }}"
+    group: "{{ php_telegram_bot_websrv_user }}"
+  with_items: "{{ php_telegram_bot_bots }}"
+  when: item.project_repo is not defined or item.dotenv_src is defined or item.dotenv_path is defined
