@@ -26,7 +26,7 @@
   composer:
     working_dir: "{{ item.working_dir }}"
     command: require
-    arguments: "{{ php_telegram_bot_composer_package }}" "{{ php_telegram_bot_composer_version }}"
+    arguments: "{{ [php_telegram_bot_composer_package, php_telegram_bot_composer_version] | join(' ') }}"
   with_items: "{{ php_telegram_bot_bots }}"
   when: item.project_repo is not defined
 
@@ -40,8 +40,8 @@
   register: php_telegram_bot_bots_installed
 
 - name: Copy manager.php for all bots.
-  copy:
-    src: "{{ item.manager_src | default('manager.default.php') }}"
+  template:
+    src: "{{ item.manager_src | default('manager.default.php.j2') }}"
     dest: "{{ item.manager_path | default(item.working_dir + '/public/manager.php') }}"
     owner: "{{ php_telegram_bot_websrv_user }}"
     group: "{{ php_telegram_bot_websrv_user }}"
