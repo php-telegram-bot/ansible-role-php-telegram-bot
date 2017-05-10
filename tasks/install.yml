@@ -1,4 +1,21 @@
 ---
+- name: Ensure working directory exists.
+  file:
+    path: "{{ item.working_dir }}"
+    state: directory
+    owner: "{{ php_telegram_bot_websrv_user }}"
+    group: "{{ php_telegram_bot_websrv_user }}"
+  with_items: "{{ php_telegram_bot_bots }}"
+
+- name: Ensure public folder for simple bots exists.
+  file:
+    path: "{{ item.working_dir }}/public"
+    state: directory
+    owner: "{{ php_telegram_bot_websrv_user }}"
+    group: "{{ php_telegram_bot_websrv_user }}"
+  with_items: "{{ php_telegram_bot_bots }}"
+  when: item.project_repo is not defined and item.manager_path is not defined
+
 - name: Fetch all project bot repositories.
   become: yes
   become_user: "{{ php_telegram_bot_websrv_user }}"
@@ -10,15 +27,6 @@
   with_items: "{{ php_telegram_bot_bots }}"
   when: item.project_repo is defined
   ignore_errors: yes
-
-- name: Ensure public folder for simple bots exists.
-  file:
-    path: "{{ item.working_dir }}/public"
-    state: directory
-    owner: "{{ php_telegram_bot_websrv_user }}"
-    group: "{{ php_telegram_bot_websrv_user }}"
-  with_items: "{{ php_telegram_bot_bots }}"
-  when: item.project_repo is not defined and item.manager_path is not defined
 
 - name: Create all simple bot projects.
   become: yes
