@@ -86,6 +86,19 @@ php_telegram_bot_bots: []
 
 Available fields for `php_telegram_bot_bots` entry are the ones available for the [PHP Telegram Bot Manager][php-telegram-bot-manager]. Simply use YAML format to define variables in the same structure as the [`manager.php`][manager.php-example] parameters array.
 
+## Role Hooks
+
+This role has hooks before and after each section.
+
+```yaml
+php_telegram_bot_hooks_before_install: my-hook.yml
+php_telegram_bot_hooks_after_install: my-hook.yml
+php_telegram_bot_hooks_before_database: my-hook.yml
+php_telegram_bot_hooks_after_database: my-hook.yml
+php_telegram_bot_hooks_before_webhook: my-hook.yml
+php_telegram_bot_hooks_after_webhook: my-hook.yml
+```
+
 ## Role Tags
 
 Each part of the setup has a tag.

@@ -1,7 +1,18 @@
 ---
-- include: install.yml
+- block:
+  - include: "{{ php_telegram_bot_hooks_before_install | default('empty.yml') }}"
+  - include: install.yml
+  - include: "{{ php_telegram_bot_hooks_after_install | default('empty.yml') }}"
   tags: php-telegram-bot:install
-- include: database.yml
+
+- block:
+  - include: "{{ php_telegram_bot_hooks_before_database | default('empty.yml') }}"
+  - include: database.yml
+  - include: "{{ php_telegram_bot_hooks_after_database | default('empty.yml') }}"
   tags: php-telegram-bot:database
-- include: webhook.yml
+
+- block:
+  - include: "{{ php_telegram_bot_hooks_before_webhook | default('empty.yml') }}"
+  - include: webhook.yml
+  - include: "{{ php_telegram_bot_hooks_after_webhook | default('empty.yml') }}"
   tags: php-telegram-bot:webhook
