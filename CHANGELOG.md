@@ -11,6 +11,10 @@ Exclamation symbols (:exclamation:) note something of importance e.g. breaking c
 ### Fixed
 ### Security
 
+## [0.3.0] - 2017-05-10
+### Added
+- Hooks!
+
 ## [0.2.0] - 2017-05-09
 ### Added
 - Changelog.
