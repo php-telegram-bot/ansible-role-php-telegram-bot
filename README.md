@@ -37,7 +37,7 @@ For any external server, you just need to be able to access the database with yo
 ```
 php_telegram_bot_composer_package: noplanman/telegram-bot-manager
 php_telegram_bot_composer_version: ''
-php_telegram_bot_mysql_structure: vendor/longman/telegram-bot/structure.sql
+php_telegram_bot_mysql_structure: vendor/php-telegram-bot/structure.sql
 
 php_telegram_bot_websrv_user: www-data
 php_telegram_bot_websrv_group: www-data
